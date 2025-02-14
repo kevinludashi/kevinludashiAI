@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8"> <!-- 设置字符编码为 UTF-8，支持中文字符 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 确保页面在移动设备上适配 -->
+    <title>Kevinludashi的AI大模型收藏</title> <!-- 网页标题 -->
+    <link rel="stylesheet" href="styles.css"> <!-- 引入外部样式表 -->
+    <style>
+        /* 页面基本样式 */
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: auto;  /* 或者删除该行，默认情况下是自动滚动 */
+            position: relative;
+            background: linear-gradient(45deg, #ff0000, #ff6ec7, #ff8a00, #7bdff2, #4caf50);
+            background-size: 600% 600%;
+            animation: gradientAnimation 10s ease infinite;
+        }
+
+        
+        /* 容器样式 */
+        .container {
+            width: 100%; /* 容器宽度占满屏幕 */
+            min-height: 100vh; /* 容器最小高度为视口高度 */
+            margin: 0 auto; /* 自动水平居中 */
+            padding: 20px; /* 内边距 */
+            background-color: rgba(255, 255, 255, 0); /* 设置背景透明 */
+            border-radius: 8px; /* 圆角效果 */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+            box-sizing: border-box; /* 包含 padding 和 border 在内的宽高计算 */
+            display: flex; /* 使用 flex 布局 */
+            flex-direction: column; /* 垂直排列子元素 */
+            justify-content: flex-start; /* 从顶部开始排列 */
+            overflow: auto; /* 防止内容溢出容器 */
+        }
+        
+        /* 标题样式 */
+        h1, h2 {
+            text-align: center; /* 内容居中 */
+            color: #333; /* 字体颜色 */
+        }
+        
+        /* 搜索框样式 */
+        .search-container {
+            margin-bottom: 20px; /* 底部间距 */
+            text-align: center; /* 内容居中 */
+        }
+        
+        #search-input {
+            width: 60%; /* 宽度为容器的 60% */
+            padding: 8px; /* 内边距 */
+            font-size: 16px; /* 字体大小 */
+            border: 1px solid #ccc; /* 边框样式 */
+            border-radius: 4px; /* 边框圆角 */
+        }
+        
+        /* 标签按钮容器样式 */
+        .tags-container {
+            display: flex; /* 使用 flex 布局 */
+            justify-content: space-around; /* 子元素之间均匀分布 */
+            flex-wrap: wrap; /* 允许子元素换行 */
+            margin-bottom: 30px; /* 底部间距 */
+        }
+        
+        /* 标签按钮样式 */
+        .tag-button {
+            background-color: #007bff; /* 背景颜色 */
+            color: white; /* 字体颜色 */
+            border: 1px solid #ccc; /* 边框样式 */
+			/* border: none; /* 去掉边框 */
+            padding: 8px 16px; /* 内边距 */
+            margin: 5px; /* 外边距 */
+            border-radius: 4px; /* 边框圆角 */
+            cursor: pointer; /* 鼠标悬停时显示为指针 */
+        }
+        
+        .tag-button:hover {
+            background-color: #0056b3; /* 鼠标悬停时改变背景颜色 */
+        }
+        
+        /* 网址卡片样式 */
+        .url-card {
+            background-color: rgba(255, 255, 255, 0.7); /* 背景颜色 */
+            border: 1px solid white; /* 边框样式 */
+            padding: 10px; /* 内边距 */
+            margin: 8px; /* 外边距 */
+            border-radius: 8px; /* 边框圆角 */
+            width: 230px; /* 固定宽度 */
+            box-sizing: border-box; /* 包含 padding 和 border 在内的宽高计算 */
+            vertical-align: top; /* 垂直对齐 */
+            transition: transform 0.2s; /* 鼠标悬停时平滑过渡效果 */
+            max-width: 100%; /* 限制最大宽度 */
+            flex-grow: 1; /* 可伸缩 */
+            flex-basis: 230px; /* 设置卡片基础宽度 */
+            height: auto; /* 高度根据内容自动调整 */
+        }
+        
+        .url-card:hover {
+            transform: scale(1.05); /* 鼠标悬停时放大效果 */
+        }
+        
+        /* 网址卡片标题样式 */
+        .url-card h3 {
+            margin-top: 0; /* 顶部外边距为 0 */
+            font-size: 16px; /* 字体大小 */
+            word-wrap: break-word; /* 自动换行 */
+        }
+        
+        /* 网址卡片描述样式 */
+        .url-card p {
+            font-size: 14px; /* 字体大小 */
+            color: #555; /* 字体颜色 */
+            height: auto; /* 高度根据内容自动调整 */
+            overflow: hidden; /* 隐藏溢出的内容 */
+            word-wrap: break-word; /* 自动换行 */
+        }
+        
+        /* 网址卡片链接样式 */
+        .url-card a {
+            color: #007bff; /* 链接颜色 */
+            text-decoration: none; /* 去掉下划线 */
+            font-weight: bold; /* 加粗字体 */
+        }
+        
+        .url-card a:hover {
+            text-decoration: underline; /* 鼠标悬停时加上下划线 */
+        }
+        
+        /* 网址卡片标签样式 */
+        .url-card .tags {
+            margin-top: 10px; /* 上边距 */
+            font-size: 12px; /* 字体大小 */
+            color: #888; /* 字体颜色 */
+            text-align: left; /* 左对齐 */
+        }
+        
+        /* 无结果提示样式 */
+        .no-results {
+            text-align: center; /* 居中显示 */
+            color: #f44336; /* 红色字体 */
+            font-size: 18px; /* 字体大小 */
+            font-weight: bold; /* 加粗字体 */
+        }
+        
+        /* 网址卡片容器样式 */
+        .links-container {
+            display: flex; /* 使用 flex 布局 */
+            justify-content: center; /* 居中显示 */
+            flex-wrap: wrap; /* 允许换行 */
+            gap: 20px; /* 卡片之间的间距 */
+            margin-top: 20px; /* 上边距 */
+        }
+        
+        #url-list {
+            display: flex; /* 使用 flex 布局 */
+            justify-content: center; /* 居中显示 */
+            flex-wrap: wrap; /* 允许换行 */
+            gap: 0px; /* 卡片之间的间距 */
+            margin-top: 5px; /* 上边距 */
+        }
+        
+        /* 页脚样式 */
+        footer {
+            text-align: center; /* 内容居中 */
+            font-size: 14px; /* 字体大小 */
+            color: #888; /* 字体颜色 */
+            padding: 10px 0; /* 内边距 */
+            background-color: #f4f4f9; /* 背景颜色 */
+            position: sticky; /* 粘性定位 */
+            bottom: 0; /* 在页面底部 */
+            width: 100%; /* 宽度占满 */
+            left: 0; /* 向左对齐 */
+            background-color: #333; /* 背景颜色 */
+            z-index: 1000; /* 确保页脚位于最上层 */
+            margin-top: auto; /* 保证页脚始终在页面底部 */
+        }
+        
+        footer a {
+            color: #007bff; /* 链接颜色 */
+            text-decoration: none; /* 去掉下划线 */
+        }
+        
+        footer a:hover {
+            text-decoration: underline; /* 鼠标悬停时加下划线 */
+        }
+        
+        /* 小屏幕调整样式 */
+        @media (max-width: 600px) {
+            .url-card {
+                flex-basis: calc(50% - 20px); /* 每行显示 2 个卡片，留有间距 */
+                min-width: 220px; /* 确保卡片不会太小 */
+            }
+        
+            #url-list {
+                gap: 2px; /* 调整卡片之间的间距 */
+            }
+        }
+        
+        /* 超小屏幕调整样式 */
+        @media (max-width: 400px) {
+            .url-card {
+                flex-basis: calc(100% - 20px); /* 每行显示 1 个卡片 */
+            }
+        }
+		
+		/* 说明部分样式 */
+		.instructions {
+			border: 1px solid white; /* 边框样式 */
+		    position: fixed;
+			top: 50%; /* 垂直居中 */
+			left: 50%; /* 水平居中 */
+			transform: translate(-50%, -50%); /* 使用 transform 精确居中 */
+			font-size: 16px;
+			color: #333;
+			background-color:  rgba(255, 255, 255, 0.9);;
+			padding: 15px;
+			border-radius: 5px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+			width: 80%;
+			z-index: 10;
+			display: block; /* 默认显示说明 */
+		}
+					
+		.instructions ul {
+			margin: 0;
+			padding-left: 0; /* 去掉左侧内边距 */
+			list-style-type: none; /* 去掉默认的项目符号 */
+		}
+					
+		.instructions li {
+			margin-bottom: 15px; /* 增加每行说明之间的间距 */
+			padding-left: 30px; /* 为每行文字增加左间距 */
+		}
+		
+		.instructions h3 {
+			text-align: center; /* 标题居中 */
+			font-size: 30px;
+			color: red;
+			margin-top: 10px; /* 增加标题的上间距 */
+		}
+					
+		.close-btn {
+			position: absolute;
+			top: 5px;
+			right: 20px;
+			font-size: 20px;
+			color: #888;
+			cursor: pointer;
+		}
+		/* 说明部分样式 */
+		
+       /* 渐变背景动画 */
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        /* 粒子容器 */
+        .particle-container {
+            position: fixed;  /* 使用固定定位 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;  /* 确保粒子不影响页面其他元素 */
+            z-index: 1;
+        }
+        
+        /* 粒子的基础样式 */
+        .particle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: particleAnimation 3s infinite ease-in-out;
+        }
+        
+        /* 粒子动画 */
+        @keyframes particleAnimation {
+            0% {
+                transform: translate(0, 0);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translate(50px, 50px);
+                opacity: 0.5;
+            }
+            100% {
+                transform: translate(100px, 100px);
+                opacity: 0;
+            }
+    </style>
+</head>
+<body>
+    <!-- 粒子容器 -->
+	<div id="particle-container" class="particle-container"></div>
+
+	<!-- 说明部分 -->
+	<div class="instructions" id="instructions">
+	  <span class="close-btn" id="closeBtn" style="color: red; font-size: 50px;">&times;</span> <!-- 关闭按钮 -->
+	  <h3>温馨提示：</h3>
+	  <ul>
+	    <li>1、由于网页托管于国际服务器，可能会出现加载不出来的问题（该服器很安全，可放心使用）；</li>
+	    <li>2、当页面出现BUG或者打不开时请尝试多刷新几次（刷新20+次都属于正常）；</li>
+	    <li>3、当刷新页面20+次后依然无法打开时可尝试复制网址更换浏览器打开；</li>
+	    <li>4、微信打开时可能会提醒有风险，请忽略，也可能会显示打不开，请尝试多刷新几次就能打开；</li>
+	    <li>5、网页部分内容来自网络，请自行甄别，博主不承担任何风险；</li>
+	  </ul>
+	</div>
+	
+    <div class="container">
+        <h1 style="color: white;">AI大模型</h1> <!-- 页面主标题 -->
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="搜索网址或标签..." oninput="searchUrls()"> <!-- 搜索框，输入时触发搜索 -->
+        </div>
+
+        <div class="tags-container">
+            <div id="tags-list">
+                <!-- 标签按钮会动态生成在这里 -->
+            </div>
+        </div>
+
+        <div class="links-container">
+            <div id="url-list">
+                <!-- 收藏的网址会动态生成在这里 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚部分 -->
+    <footer>
+        © 2025 Kevinludashi 网址收藏. 未经许可，禁止转载. <!-- 页脚版权信息 -->
+    </footer>
+
+    <script>
+        // 网址数据，模拟收藏的网址（你可以根据需求自行修改或扩展）
+        const urls = [
+			
+			// 网址数据 卡片
+            {
+                title: "deepseek",
+                link: "https://www.deepseek.com/",
+                description: "比ChatGPT还厉害的国产开源AI大模型。",
+                tags: ["全部", "#AI", "#大模型", "#国产"]
+            },
+			
+			// 网址数据 卡片
+            {
+                title: "Qwen Chat",
+                link: "https://chat.qwenlm.ai/",
+                description: "国内编程能力超强的国产AI大模型。",
+                tags: ["全部", "#AI", "#大模型", "#国产"]
+            },
+			
+			// 网址数据 卡片
+            {
+                title: "Chat GPT",
+                link: "https://chat.openai.com",
+                description: "国外最强AI大模型。",
+                tags: ["全部", "#AI", "#大模型", "#国外"]
+            },
+			
+			// 网址数据 卡片
+            {
+                title: "deepseek API调用及本地部署教程",
+                link: "https://kevinludashi.github.io/WZSCyinshipinziyuan/",
+                description: "deepseek的API调用和本地部署的方法和教程。",
+                tags: ["全部", "#AI", "#部署教程"]
+            },
+
+			
+        ];
+		// 以上网址数据，模拟收藏的网址（你可以根据需求自行修改或扩展）
+		
+		
+
+        // 渲染标签
+        function renderTags() {
+            const tagsSet = new Set(); // 使用 Set 结构去重标签
+            urls.forEach(url => {
+                url.tags.forEach(tag => {
+                    tagsSet.add(tag); // 将每个标签添加到 Set 中
+                });
+            });
+
+            const tagsList = document.getElementById("tags-list");
+            tagsList.innerHTML = ""; // 清空之前的标签
+
+            tagsSet.forEach(tag => {
+                const button = document.createElement("button");
+                button.classList.add("tag-button");
+                button.textContent = tag;
+                // 点击标签时调用搜索，传入标签作为搜索条件
+                button.onclick = function () {
+                    searchUrls(tag); 
+                };
+                tagsList.appendChild(button);
+            });
+        }
+
+        // 渲染网址列表
+        function renderUrls(searchTerm = '') {
+            const urlList = document.getElementById("url-list");
+            urlList.innerHTML = "";  // 清空当前显示的列表
+
+            const filteredUrls = urls.filter(url => {
+                const searchString = `${url.title} ${url.description} ${url.tags.join(' ')}`.toLowerCase();
+                return searchString.includes(searchTerm.toLowerCase()); // 进行大小写不敏感匹配
+            });
+
+            if (filteredUrls.length === 0) {
+                urlList.innerHTML = "<p class='no-results'>没有找到相关的网址。</p>"; // 没有找到结果时显示提示
+            }
+
+            filteredUrls.forEach(url => {
+                const urlCard = document.createElement("div");
+                urlCard.classList.add("url-card");
+
+                const title = document.createElement("h3");
+                // 将标题链接化，点击标题直接跳转
+                const link = document.createElement("a");
+                link.href = url.link;
+                link.textContent = url.title;
+                link.target = "_blank";  // 新窗口打开链接
+                title.appendChild(link);
+
+                const description = document.createElement("p");
+                description.textContent = url.description;
+
+                const tags = document.createElement("div");
+                tags.classList.add("tags");
+                tags.textContent = `标签: ${url.tags.join(', ')}`;
+
+                urlCard.appendChild(title);
+                urlCard.appendChild(description);
+                urlCard.appendChild(tags);
+
+                urlList.appendChild(urlCard);
+            });
+        }
+
+        // 搜索功能：根据搜索框输入的内容进行过滤
+        function searchUrls(searchTerm = '') {
+            const inputTerm = searchTerm.trim() === '' ? document.getElementById("search-input").value.trim() : searchTerm;
+            if (inputTerm === '') {
+                renderUrls(); // 如果搜索框为空，则显示所有网址
+            } else {
+                renderUrls(inputTerm); // 进行搜索并显示相关的网址
+            }
+        }
+
+        // 初始化显示标签和网址
+        renderTags();
+        renderUrls(); 
+		
+		// 关闭说明按钮
+			closeBtn.addEventListener('click', () => {
+			instructions.style.display = 'none'; // 隐藏说明部分
+			});
+			
+            // 创建粒子背景
+			function createParticles() {
+			    const particleContainer = document.getElementById('particle-container');
+			    const particlesCount = 100; // 粒子数量
+			
+			    for (let i = 0; i < particlesCount; i++) {
+			        const particle = document.createElement('div');
+			        particle.classList.add('particle');
+			
+			        // 随机设置粒子的位置
+			        particle.style.top = `${Math.random() * window.innerHeight}px`;
+			        particle.style.left = `${Math.random() * window.innerWidth}px`;
+			
+			        // 随机设置粒子的动画时间
+			        particle.style.animationDuration = `${Math.random() * 2 + 1}s`;
+			
+			        // 将粒子添加到容器中
+			        particleContainer.appendChild(particle);
+			    }
+			}
+			
+			// 调用粒子生成函数
+			createParticles();
+			
+    </script>
+</body>
+</html>
